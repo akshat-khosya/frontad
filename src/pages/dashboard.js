@@ -9,8 +9,7 @@ function Dashboard(props){
     return(
        
         <>
-        <Popup />
-         <Sidebar /> 
+      
         
         <h1 onClick={logout}>Logout</h1>
        
