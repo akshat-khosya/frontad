@@ -9,7 +9,7 @@ function Popup(props){
     <div className="popup-box">
         <div className="box">
           <div className="box-heading">
-          <h1>{props.heading}</h1>
+          <h1 className="box-hea">{props.heading}</h1>
           </div>
            <div className="box-content">
            <p className="box-para">{props.content}</p>
