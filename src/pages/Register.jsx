@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React, {useEffect, useState } from 'react';
 import axios from 'axios';
-import '../css/style.css';
-import '../fonts/material-icon/css/material-design-iconic-font.min.css';
-import svglogin from '../images/undraw_Access_account_re_8spm.svg';
+import Cookies from 'js-cookie';
 import Popup from '../components/Popup';
-
-function Login(props) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [popupContent, setPopupContent] = useState({
-        heading: "",
-        content: ""
-    });
+import svgregister from '../images/undraw_Access_account_re_8spm.svg';
+function Register(props){
+    const [popupShow, setPopupShow] =useState(false);
+  const [popupContent,setPopupContent]=useState({
+    heading:"",
+    messgae:""
+  });
     const [dsignup, newSignup] = useState({
         jeeroll: "",
         email: "",
@@ -18,9 +16,6 @@ function Login(props) {
         repass: "",
         agreeterm: false
     });
-    function togglePopup(){
-        setIsOpen(!isOpen);
-      }
     function handelChange(event) {
         const { name, value } = event.target;
 
@@ -46,12 +41,12 @@ function Login(props) {
             password: dsignup.pass,
             repassword: dsignup.repass
         }
-        axios.post('https://admissionportaliii.herokuapp.com/regiss/singup', Reg).then(function (response) {
+        axios.post('http://localhost:4000/register', Reg).then(function (response) {
             setPopupContent({
-                heading:response.data,
-                content:""
-              });
-              togglePopup();
+                heading:"Error",
+                message:response.data
+            })    
+            setPopupShow(true);
            
             return response.data;
         }).catch(function (error) {
@@ -72,38 +67,65 @@ function Login(props) {
         event.preventDefault();
     }
 
-    function change(e) {
-        e.preventDefault();
-        props.currentView();
-    }
-    return (
+    
+    useEffect(()=>{
+        let Signin = {
+              
+          email: Cookies.get('email'),
+          password: Cookies.get('password')
+          
+      }
+
+        
+          axios.post('http://localhost:4000/register',Signin).then(function(response){
+              if(response.data.login===true){
+                
+                  props.history.push("/dashboard");
+                  
+              }else{
+                
+              }
+          }).catch(function (error) {
+              console.log(error);
+          });
+          Signin={
+            email:"",
+            password:""
+          }
+          
+      },[])
+      
+    return(
         <>
-            <section className="signup">
-            {isOpen&& <Popup content={popupContent.content} heading={popupContent.heading} handleClose={togglePopup}/>}
-                <div className="container">
+        <section className="signup">
+        <Popup
+        show={popupShow} heading={popupContent.heading} message={popupContent.message}
+        onHide={() => setPopupShow(false)}
+      />
+                <div className="containers">
                     <div className="signup-content">
                         <div className="signup-form">
                             <h2 className="form-title">Sign up</h2>
-                            <form onSubmit={handelSubmit} className="register-form" id="register-form">
+                            <form  onSubmit={handelSubmit} className="register-form" id="register-form">
                                 <div className="form-group">
                                     <label for="jeeroll"><i className="zmdi zmdi-account material-icons-name"></i></label>
-                                    <input required value={dsignup.jeeroll} onChange={handelChange}
-                                        type="text" name="jeeroll" id="jeeroll" placeholder="Your JEE Roll" />
+                                    <input required 
+                                        type="text"  value={dsignup.jeeroll} onChange={handelChange} name="jeeroll" id="jeeroll" placeholder="Your Full Name" />
                                 </div>
                                 <div className="form-group">
                                     <label for="email"><i className="zmdi zmdi-email"></i></label>
-                                    <input required value={dsignup.email} onChange={handelChange} type="email" name="email" id="email" placeholder="Your Email" />
+                                    <input required value={dsignup.email} onChange={handelChange}  type="email" name="email" id="email" placeholder="Your Email" />
                                 </div>
                                 <div className="form-group">
                                     <label for="pass"><i className="zmdi zmdi-lock"></i></label>
-                                    <input required value={dsignup.pass} onChange={handelChange} type="password" name="pass" id="pass" placeholder="Password" />
+                                    <input required value={dsignup.pass} onChange={handelChange}  type="password" name="pass" id="pass" placeholder="Password" />
                                 </div>
                                 <div className="form-group">
                                     <label for="repass"><i className="zmdi zmdi-lock-outline"></i></label>
-                                    <input required value={dsignup.repass} onChange={handelChange} type="password" name="repass" id="repass" placeholder="Repeat your password" />
+                                    <input required value={dsignup.repass} onChange={handelChange}  type="password" name="repass" id="repass" placeholder="Repeat your password" />
                                 </div>
                                 <div className="form-group">
-                                    <input required value={dsignup.agreeterm} onChange={handelChange} type="checkbox" name="agreeterm" id="agreeterm" className="agree-term" />
+                                    <input required value={dsignup.agreeterm} onChange={handelChange}  type="checkbox" name="agreeterm" id="agreeterm" className="agree-term" />
                                     <label for="agreeterm" className="label-agree-term"><span><span></span></span>I agree all statements in  <a href="#" className="term-service">Terms of service</a></label>
                                 </div>
                                 <div className="form-group form-button">
@@ -112,15 +134,14 @@ function Login(props) {
                             </form>
                         </div>
                         <div className="signup-image">
-                            <figure><img src={svglogin} alt="sing up image" /></figure>
-                            <a href="#" onClick={change} className="signup-image-link">I am already member</a>
+                            <figure><img src={svgregister} alt="sing up image" /></figure>
+                            <a href="/"  className="signup-image-link">I am already member</a>
                         </div>
                     </div>
                 </div>
             </section>
-
         </>
+
     );
 }
-
-export default Login;
+export default Register;
