@@ -35,7 +35,7 @@ function Changepassword(){
       newpass:password.newpass
     }
     if(password.newpass===password.renewpass){
-      axios.post('http://localhost:4000/newpassword', thePassword).then(function (response) {
+      axios.post('https://admissionportaliii.herokuapp.com/newpassword', thePassword).then(function (response) {
             if(response.data.status===true){
               history.push("/");
             }

@@ -14,7 +14,7 @@ function MyVerticallyCenteredModal(props) {
                   email:Cookies.get('email'),
                   phone:number
               };
-              axios.patch('http://localhost:4000/phone',values).then(function(res){
+              axios.patch('https://admissionportaliii.herokuapp.com/phone',values).then(function(res){
                   console.log(res.data);
                   props.onHide();
               }).catch(function (error) {

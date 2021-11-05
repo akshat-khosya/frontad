@@ -40,7 +40,7 @@ function Contactus() {
     subject:"",
     messa:""
   });
-  axios.post('http://localhost:4000/contactus', message).then(function (response) {
+  axios.post('https://admissionportaliii.herokuapp.com/contactus', message).then(function (response) {
             console.log(response.data);
            
             return response.data;

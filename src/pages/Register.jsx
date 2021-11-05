@@ -41,7 +41,7 @@ function Register(props){
             password: dsignup.pass,
             repassword: dsignup.repass
         }
-        axios.post('http://localhost:4000/register', Reg).then(function (response) {
+        axios.post('https://admissionportaliii.herokuapp.com/register', Reg).then(function (response) {
             setPopupContent({
                 heading:"Error",
                 message:response.data
